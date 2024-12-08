@@ -1,33 +1,35 @@
-def process_in(file):
-    
-    levels = []
+levels = []
 
-    with open(file, 'r') as inp:
-        for line in inp:
-            items = line.strip().split(' ')
-            items = [int(x) for x in items]
-            levels.append(items)
+with open("in.txt", "r") as inp:
+    for line in inp:
+        items = line.strip().split(' ')
+        items = [int(x) for x in items]
+        levels.append(items)
 
-    return levels
+def part_one(level):
 
-def safe(level):
-    
-    faults = 0
-    for i in range(len(level)-1):
-        if
+    # if not in sorted order
+    if level != sorted(level) and level != sorted(level, reverse=True):
+        return 0
 
-
-
-
+    # if gap is bigger than 3 or less than 1
     for i in range(len(level) - 1):
         diff = abs(int(level[i + 1]) - int(level[i]))
-        if diff != 3 and diff != 1 and diff != 2:
-            faults += 1
-            if faults > 1:
-                return 0
-
+        if diff > 3 or diff < 1:
+            return 0
     return 1
 
-levels = process_in('test.txt')
-part_one = sum(safe(level) for level in levels)
-print(part_one)
+def part_two(level):
+    # do part one and if it fails part one, remove each item and see if it passes
+    if part_one(level) != 1:
+        for i in range(len(level)):
+            if part_one(level[:i] + level[i+1:]) == 1: return 1
+    else: 
+        return 1
+
+    return 0
+
+one = sum(part_one(level) for level in levels)
+two = sum(part_two(level) for level in levels)
+print(one)
+print(two)
